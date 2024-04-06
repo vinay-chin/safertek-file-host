@@ -8,6 +8,8 @@ const app = express();
 const port = 8080;
 
 app.use(express.static('public'));
+app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' }) }));
+
 
 // Set up multer for file upload
 const storage = multer.diskStorage({
@@ -42,7 +44,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello VINAY CHINDUKURI 2100032064!')
+    res.send('Hello VINAY CHINDUKURI 2100032064! Please use any api client to upload a file on path /upload')
 });
 
 app.listen(port, () => {
