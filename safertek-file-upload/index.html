@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">File Upload</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="mb-4">
+                <label for="fileName" class="block text-gray-700 font-bold mb-2">File Name:</label>
+                <input type="text" id="fileName" name="fileName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" placeholder="Enter file name" required>
+            </div>
+            <div class="mb-4">
+                <label for="file" class="block text-gray-700 font-bold mb-2">File:</label>
+                <input type="file" id="file" name="file" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500" required>
+            </div>
+            <button type="submit" class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Upload</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript code to handle form submission
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('http://localhost:8080/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('File uploaded successfully!');
+                    form.reset(); // Clear form fields after successful upload
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'An error occurred while uploading the file.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            }
+        });
+    </script>
+</body>
+</html>
